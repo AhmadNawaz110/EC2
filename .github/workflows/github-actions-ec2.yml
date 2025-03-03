@@ -1,27 +1,19 @@
-name: Push-to-EC2
+name: Deploy to EC2
 
-# Trigger deployment only on push to main branch
 on:
   push:
     branches:
-      - main
+      - main  # Trigger on push to the main branch
 
 jobs:
   deploy:
-    name: Deploy to EC2 on master branch push
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout the files
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Deploy to Server 1
-        uses: easingthemes/ssh-deploy@main
-
-     
-        env:
-
-- name: Install SSH key
+      - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.EC2_SSH_KEY }}  # Private SSH key
@@ -34,17 +26,3 @@ jobs:
       - name: Run remote commands (optional)
         run: |
           ssh -i ${{ secrets.EC2_SSH_KEY }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "cd /path/to/destination/ && ./deploy.sh"
-
-        
-       
-        with:
-          host: ${{ secrets.HOST_DNS }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            sudo apt-get -y update
-            sudo apt-get install -y apache2
-            sudo systemctl start apache2
-            sudo systemctl enable apache2
-            cd home
-            sudo mv * /var/www/html

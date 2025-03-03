@@ -21,8 +21,18 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}  # Private SSH key
           known_hosts: ${{ secrets.HOST_DNS }}  # Known hosts for SSH
 
-      - name: Rsync files to EC2
-        run: |
-          rsync -avz -e "ssh -i ${{ secrets.EC2_SSH_KEY }}" ./ ${{ secrets.USERNAME }}@${{ secrets.HOST_DNS }}:/path/to/destination/
+    - name: Executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo apt-get -y update
+            sudo apt-get install -y apache2
+            sudo systemctl start apache2
+            sudo systemctl enable apache2
+            cd home
+            sudo mv * /var/www/html
 
   

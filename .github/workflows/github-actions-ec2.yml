@@ -25,6 +25,4 @@ jobs:
         run: |
           rsync -avz -e "ssh -i ${{ secrets.EC2_SSH_KEY }}" ./ ${{ secrets.USERNAME }}@${{ secrets.HOST_DNS }}:/path/to/destination/
 
-      - name: Run remote commands (optional)
-        run: |
-          ssh -i ${{ secrets.EC2_SSH_KEY }} ${{ secrets..USERNAME }}@${{ secrets.HOST_DNS }} "cd /path/to/destination/ && ./deploy.sh"
+  

@@ -17,12 +17,12 @@ jobs:
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.EC2_SSH_KEY }}  # Private SSH key
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}  # Known hosts for SSH
+          known_hosts: ${{ secrets.HOST_DNS }}  # Known hosts for SSH
 
       - name: Rsync files to EC2
         run: |
-          rsync -avz -e "ssh -i ${{ secrets.EC2_SSH_KEY }}" ./ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/path/to/destination/
+          rsync -avz -e "ssh -i ${{ secrets.EC2_SSH_KEY }}" ./ ${{ secrets.USERNAME }}@${{ secrets.HOST_DNS }}:/path/to/destination/
 
       - name: Run remote commands (optional)
         run: |
-          ssh -i ${{ secrets.EC2_SSH_KEY }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "cd /path/to/destination/ && ./deploy.sh"
+          ssh -i ${{ secrets.EC2_SSH_KEY }} ${{ secrets..USERNAME }}@${{ secrets.HOST_DNS }} "cd /path/to/destination/ && ./deploy.sh"
